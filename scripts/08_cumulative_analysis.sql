@@ -13,6 +13,7 @@ EXAMPLE:Moving AVG sale by month
 
 SQL Functions Used:
     - Window Functions: SUM() OVER(), AVG() OVER()
+--Default window frame ('BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW')
 ===============================================================================
 */
 
@@ -51,4 +52,36 @@ FROM (
 		WHERE order_date IS NOT NULL
 		GROUP BY TO_CHAR(order_date, 'YYYY-MM')
 		ORDER BY TO_CHAR(order_date, 'YYYY-MM')
+)t
+
+
+---TO LIMIT CUMULATIVE SALE PER month and year
+
+
+SELECT year_month,
+	   total_sales,
+       SUM(total_sales) OVER(PARTITION BY year_month ORDER BY year_month) AS running_total_sales
+FROM (
+		SELECT 
+			TO_CHAR(order_date, 'YYYY-MM') AS year_month,
+			SUM(sales_amount) AS total_sales
+		FROM gold.fact_sales
+		WHERE order_date IS NOT NULL
+		GROUP BY TO_CHAR(order_date, 'YYYY-MM')
+		ORDER BY TO_CHAR(order_date, 'YYYY-MM')
+)t
+
+
+
+---Year wise SELECT years,
+	   total_sales,
+       SUM(total_sales) OVER(PARTITION BY years ORDER BY years) AS running_total_sales
+FROM (
+		SELECT 
+			EXTRACT(YEAR FROM order_date) AS years,
+			SUM(sales_amount) AS total_sales
+		FROM gold.fact_sales
+		WHERE order_date IS NOT NULL
+		GROUP BY EXTRACT(YEAR FROM order_date)
+		ORDER BY EXTRACT(YEAR FROM order_date)
 )t
