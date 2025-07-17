@@ -85,3 +85,23 @@ FROM (
 		GROUP BY EXTRACT(YEAR FROM order_date)
 		ORDER BY EXTRACT(YEAR FROM order_date)
 )t
+
+
+---Moving Average		
+
+
+
+SELECT years,
+	   total_sales,
+       SUM(total_sales) OVER(ORDER BY years) AS running_total_sales,
+	   AVG(avg_price) OVER(ORDER BY years) AS moving_avg
+FROM (
+		SELECT 
+			EXTRACT(YEAR FROM order_date) AS years,
+			SUM(sales_amount) AS total_sales,
+			AVG(price) AS avg_price
+		FROM gold.fact_sales
+		WHERE order_date IS NOT NULL
+		GROUP BY EXTRACT(YEAR FROM order_date)
+		ORDER BY EXTRACT(YEAR FROM order_date)
+)t
