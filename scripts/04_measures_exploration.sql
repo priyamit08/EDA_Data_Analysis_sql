@@ -49,7 +49,25 @@ SELECT COUNT(DISTINCT customer_key) AS total_no_customer FROM gold.dim_customers
 
 -- Find the total number of customers that has placed an order
 SELECT COUNT(customer_key) AS total_no_customer FROM gold.fact_sales
+
+
+
 -- Generate a Report that shows all key metrics of the business
+SELECT 'Total_Sales' AS measure_name,  SUM(sales_amount) AS measure_value FROM gold.fact_sales
+UNION ALL
+SELECT 'Item_Quantity' AS measure_value, SUM(quantity) AS measure_value FROM gold.fact_sales
+UNION ALL
+SELECT 'Average_Selling_Price' AS measure_name,ROUND(AVG(price)) AS measure_value FROM gold.fact_sales
+UNION ALL
+SELECT 'Total_no_Order' AS measure_value, COUNT(DISTINCT order_number) AS measure_value FROM gold.fact_sales
+UNION ALL
+SELECT 'Total_No_Product' AS measure_value,COUNT(product_name) AS measure_value FROM gold.dim_products
+UNION ALL
+SELECT 'Total_No_Customer' AS measure_name ,COUNT(DISTINCT customer_key) AS measure_value FROM gold.dim_customers
+UNION ALL
+SELECT 'Total_Customer_Placed_Order' AS measure_name ,COUNT(DISTINCT customer_key) AS measure_value FROM gold.fact_sales
+
+
 
 
 
