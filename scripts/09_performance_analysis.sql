@@ -18,7 +18,8 @@ Example
 [Current] - [Target]
 Current sales with Avg sale
 Current sale with lowest/ highest sale
-Cyrrent sale with previous sale ----Year on Year (Y-O-Y)
+Current sale with previous sale ----Year on Year (Y-O-Y)
+Also check quantity , month 
 ===============================================================================
 */
 
