@@ -124,3 +124,13 @@ SELECT customer_key,
 	   ELSE total_sales/lifespan 
 	   END) AS avg_monthly_spent
 FROM customer_aggregation
+
+
+
+----Querying for the report
+
+SELECT age_groups,
+COUNT(customer_number) AS total_customer,
+SUM(total_sales) AS total_sales
+FROM gold.report_customers
+GROUP BY 1
