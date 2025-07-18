@@ -104,4 +104,4 @@ SELECT
 			 END AS customer_segment
 FROM customer_spending)t
 GROUP BY customer_segment
-ORDER BY total_customer
+ORDER BY total_customer DESC
