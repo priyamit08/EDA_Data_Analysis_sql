@@ -133,4 +133,10 @@ SELECT age_groups,
 COUNT(customer_number) AS total_customer,
 SUM(total_sales) AS total_sales
 FROM gold.report_customers
-GROUP BY 1
+GROUP BY 1;
+
+SELECT customer_segment,
+COUNT(customer_number) AS total_customer,
+SUM(total_sales) AS total_sales
+FROM gold.report_customers
+GROUP BY 1;
