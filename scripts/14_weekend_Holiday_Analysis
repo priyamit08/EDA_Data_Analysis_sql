@@ -1,0 +1,39 @@
+SELECT customer_key
+FROM gold.fact_sales
+WHERE order_date >= CURRENT_DATE - INTERVAL '1 month'
+GROUP BY customer_key
+HAVING COUNT(DISTINCT order_date) = 3;
+
+SELECT customer_key
+FROM gold.fact_sales
+WHERE order_date >= CURRENT_DATE - INTERVAL '1 month'
+  AND EXTRACT(DOW FROM order_date) IN (0, 6)  -- 0 = Sunday, 6 = Saturday
+GROUP BY customer_key;
+
+
+SELECT DISTINCT fs.customer_key
+FROM gold.fact_sales fs
+LEFT JOIN public.holidays h ON fs.order_date = h.holiday_date
+WHERE fs.order_date >= CURRENT_DATE - INTERVAL '1 month'
+  AND (
+    EXTRACT(DOW FROM fs.order_date) IN (0, 6)  -- Weekend
+    OR h.holiday_date IS NOT NULL             -- OR it's a known holiday
+  );
+
+
+SELECT customer_key
+FROM (
+  SELECT fs.customer_key, fs.order_date
+  FROM gold.fact_sales fs
+  LEFT JOIN public.holidays h ON fs.order_date = h.holiday_date
+  WHERE fs.order_date >= CURRENT_DATE - INTERVAL '1 month'
+    AND (
+      EXTRACT(DOW FROM fs.order_date) IN (0, 6)
+      OR h.holiday_date IS NOT NULL
+    )
+  GROUP BY fs.customer_key, fs.order_date
+) weekend_orders
+GROUP BY customer_key
+HAVING COUNT(DISTINCT order_date) = 3;
+
+
